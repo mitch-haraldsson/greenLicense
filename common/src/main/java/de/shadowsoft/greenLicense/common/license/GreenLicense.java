@@ -5,16 +5,18 @@ import java.util.Map;
 
 public class GreenLicense {
 
+    private final LicenseVersion version;
     private Map<String, String> feature;
-    private boolean valid;
     private boolean validMagicBytes;
+    private boolean validSignature;
     private boolean validSystem;
 
-    public GreenLicense() {
+    public GreenLicense(LicenseVersion version) {
         feature = new HashMap<>();
-        valid = false;
         validSystem = false;
         validMagicBytes = false;
+        validSignature = false;
+        this.version = version;
     }
 
     public final Map<String, String> getFeature() {
@@ -25,12 +27,18 @@ public class GreenLicense {
         this.feature = feature;
     }
 
-    public final boolean isValid() {
-        return valid;
+    public LicenseVersion getVersion() {
+        return version;
     }
 
-    public final void setValid(final boolean valid) {
-        this.valid = valid;
+    public boolean isValid() {
+        switch (version) {
+            case LICENSE_V2:
+                return validSignature & validSystem & validMagicBytes;
+            case LICENSE_V1:
+            default:
+                return validSignature & validMagicBytes;
+        }
     }
 
     public final boolean isValidMagicBytes() {
@@ -39,6 +47,14 @@ public class GreenLicense {
 
     public final void setValidMagicBytes(final boolean validMagicBytes) {
         this.validMagicBytes = validMagicBytes;
+    }
+
+    public boolean isValidSignature() {
+        return validSignature;
+    }
+
+    public void setValidSignature(final boolean validSignature) {
+        this.validSignature = validSignature;
     }
 
     public final boolean isValidSystem() {

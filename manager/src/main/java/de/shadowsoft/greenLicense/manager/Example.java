@@ -59,7 +59,7 @@ public class Example {
         GreenLicenseValidator validator = new GreenLicenseReaderV2(pk);
         try {
             GreenLicense license = validator.readLicenseFromFile("D:\\showcase\\greenLicense\\manager\\license\\test.lic");
-            if (license.isValid() && license.isValidSystem()) {
+            if (license.isValid()) {
                 System.out.println("License OK!");
                 for (Map.Entry<String, String> feature : license.getFeature().entrySet()) {
                     System.out.println(feature.getKey() + "=" + feature.getValue());

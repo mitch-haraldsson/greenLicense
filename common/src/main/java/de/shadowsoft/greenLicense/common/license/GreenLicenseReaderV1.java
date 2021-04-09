@@ -25,7 +25,7 @@ public class GreenLicenseReaderV1 extends GreenLicenseReader {
 
     @Override
     public final GreenLicense readLicense(final byte[] lic) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, SignatureException, InvalidKeySpecException {
-        final GreenLicense license = new GreenLicense();
+        final GreenLicense license = new GreenLicense(LicenseVersion.LICENSE_V1);
         final int magicBytes = ByteBuffer.wrap(lic).getInt(0);
         final int length = ByteBuffer.wrap(lic).getInt(4);
         int lastIdx = -1;
@@ -43,10 +43,9 @@ public class GreenLicenseReaderV1 extends GreenLicenseReader {
         final PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(getPk()));
         final AESCrypt aesDec = new AESCrypt(getKey(decrypt(secretKeyByte, publicKey)));
         final byte[] decPayload = aesDec.decrypt(payload);
-        final boolean validSignature = verify(toCheck, Base64.getDecoder().decode(sigByte), publicKey);
+        license.setValidSignature(verify(toCheck, Base64.getDecoder().decode(sigByte), publicKey));
         license.setValidMagicBytes(magicBytes == MAGIC_BYTES);
         license.setFeature(payloadToMap(new String(decPayload)));
-        license.setValid(validSignature);
         return license;
     }
 }

@@ -2,7 +2,7 @@ package de.shadowsoft.greenLicense.manager.ui.jfxclient.controller;
 
 import de.shadowsoft.greenLicense.manager.model.keypair.FssKeyPair;
 import de.shadowsoft.greenLicense.manager.model.keypair.KeyPairService;
-import de.shadowsoft.greenLicense.manager.model.license.LicenseVersion;
+import de.shadowsoft.greenLicense.common.license.LicenseVersion;
 import de.shadowsoft.greenLicense.manager.model.software.Feature;
 import de.shadowsoft.greenLicense.manager.model.software.Software;
 import de.shadowsoft.greenLicense.manager.model.software.SoftwareService;

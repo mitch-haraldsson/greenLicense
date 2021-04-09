@@ -1,6 +1,6 @@
 package de.shadowsoft.greenLicense.manager.model.software;
 
-import de.shadowsoft.greenLicense.manager.model.license.LicenseVersion;
+import de.shadowsoft.greenLicense.common.license.LicenseVersion;
 
 import java.util.ArrayList;
 import java.util.Iterator;

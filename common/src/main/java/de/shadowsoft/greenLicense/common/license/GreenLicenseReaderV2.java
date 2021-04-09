@@ -82,7 +82,7 @@ public class GreenLicenseReaderV2 extends GreenLicenseReader {
 
     @Override
     public final GreenLicense readLicense(final byte[] lic) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, SignatureException, InvalidKeySpecException, SocketException, InterruptedException {
-        final GreenLicense license = new GreenLicense();
+        final GreenLicense license = new GreenLicense(LicenseVersion.LICENSE_V2);
 
         final int magicBytes = ByteBuffer.wrap(lic).getInt(0);
         final int encLength = ByteBuffer.wrap(lic).getInt(4);
@@ -109,11 +109,10 @@ public class GreenLicenseReaderV2 extends GreenLicenseReader {
         final int licenseIdLength = ByteBuffer.wrap(decPayload).getInt(lastReadPos);
         lastReadPos += 4;
         final byte[] licenseId = Arrays.copyOfRange(decPayload, lastReadPos, lastReadPos + licenseIdLength);
-        final boolean validSignature = verify(toCheck, sigByte, publicKey);
+        license.setValidSignature(verify(toCheck, sigByte, publicKey));
         license.setValidMagicBytes(magicBytes == MAGIC_BYTES);
         license.setFeature(payloadToMap(new String(licensePayload)));
         license.setValidSystem(hasValidMac(licenseId));
-        license.setValid(validSignature);
         return license;
     }
 

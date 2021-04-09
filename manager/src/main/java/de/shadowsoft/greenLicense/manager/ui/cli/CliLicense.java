@@ -5,7 +5,7 @@ import de.shadowsoft.greenLicense.manager.license.LicenseCreator;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreatorV2;
 import de.shadowsoft.greenLicense.manager.model.license.License;
 import de.shadowsoft.greenLicense.manager.model.license.LicenseService;
-import de.shadowsoft.greenLicense.manager.model.license.LicenseVersion;
+import de.shadowsoft.greenLicense.common.license.LicenseVersion;
 import de.shadowsoft.greenLicense.manager.model.software.Feature;
 import de.shadowsoft.greenLicense.manager.model.software.Software;
 import de.shadowsoft.greenLicense.manager.model.software.SoftwareService;
