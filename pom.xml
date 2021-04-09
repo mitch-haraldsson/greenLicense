@@ -11,6 +11,7 @@
         <module>idgenerator</module>
         <module>common</module>
         <module>uiFramework</module>
+        <module>core</module>
     </modules>
     <scm>
         <connection>scm:git:dev@codebox.fss.local:greenLicense</connection>

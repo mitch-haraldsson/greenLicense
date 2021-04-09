@@ -1,6 +1,6 @@
-package de.shadowsoft.greenLicense.manager.ui.cli.tool;
+package de.shadowsoft.greenLicense.core.cli.tool;
 
-import de.shadowsoft.greenLicense.manager.ui.cli.output.CliOutBase;
+import de.shadowsoft.greenLicense.core.cli.CliOutBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,6 +1,6 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient.jfx;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient.jfx;
 
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.config.LanguageManager;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.config.LanguageManager;
 import de.shadowsoft.greenLicense.uiFramework.jfxframework.Controller;
 import de.shadowsoft.greenLicense.uiFramework.jfxframework.StageInitializer;
 

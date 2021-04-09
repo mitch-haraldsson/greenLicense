@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient.controller;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient.controller;
 
 
 import de.shadowsoft.greenLicense.uiFramework.jfxframework.Controller;

@@ -1,20 +1,20 @@
 package de.shadowsoft.greenLicense.manager.ui.cli;
 
 
+import de.shadowsoft.greenLicense.common.license.LicenseVersion;
+import de.shadowsoft.greenLicense.core.cli.CliOutError;
+import de.shadowsoft.greenLicense.core.cli.tool.ConsoleWriter;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreator;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreatorV2;
 import de.shadowsoft.greenLicense.manager.model.license.License;
 import de.shadowsoft.greenLicense.manager.model.license.LicenseService;
-import de.shadowsoft.greenLicense.common.license.LicenseVersion;
 import de.shadowsoft.greenLicense.manager.model.software.Feature;
 import de.shadowsoft.greenLicense.manager.model.software.Software;
 import de.shadowsoft.greenLicense.manager.model.software.SoftwareService;
-import de.shadowsoft.greenLicense.manager.ui.cli.output.CliOutError;
 import de.shadowsoft.greenLicense.manager.ui.cli.output.export.CliOutExport;
 import de.shadowsoft.greenLicense.manager.ui.cli.output.export.CliOutExportCollection;
 import de.shadowsoft.greenLicense.manager.ui.cli.output.license.CliOutLicense;
 import de.shadowsoft.greenLicense.manager.ui.cli.output.license.CliOutLicenseCollection;
-import de.shadowsoft.greenLicense.manager.ui.cli.tool.ConsoleWriter;
 import picocli.CommandLine;
 
 import java.io.DataOutputStream;

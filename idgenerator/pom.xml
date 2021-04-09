@@ -36,7 +36,7 @@
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>de.shadowsoft.greenLicense.idgeneratort.jfxclient.IdGenerator</mainClass>
+                            <mainClass>de.shadowsoft.greenLicense.idgenerator.jfxclient.IdGenerator</mainClass>
                             <manifestEntries>
                                 <Multi-Release>true</Multi-Release>
                             </manifestEntries>

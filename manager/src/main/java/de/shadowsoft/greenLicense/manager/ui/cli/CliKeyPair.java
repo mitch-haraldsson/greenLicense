@@ -1,12 +1,12 @@
 package de.shadowsoft.greenLicense.manager.ui.cli;
 
+import de.shadowsoft.greenLicense.core.cli.CliOutError;
+import de.shadowsoft.greenLicense.core.cli.tool.ConsoleWriter;
 import de.shadowsoft.greenLicense.manager.model.keypair.FssKeyPair;
 import de.shadowsoft.greenLicense.manager.model.keypair.KeyPairService;
 import de.shadowsoft.greenLicense.manager.tools.serializer.exception.DataLoadingException;
-import de.shadowsoft.greenLicense.manager.ui.cli.output.CliOutError;
 import de.shadowsoft.greenLicense.manager.ui.cli.output.key.CliOutKeyPair;
 import de.shadowsoft.greenLicense.manager.ui.cli.output.key.CliOutKeyPairCollection;
-import de.shadowsoft.greenLicense.manager.ui.cli.tool.ConsoleWriter;
 import picocli.CommandLine;
 
 import java.io.IOException;

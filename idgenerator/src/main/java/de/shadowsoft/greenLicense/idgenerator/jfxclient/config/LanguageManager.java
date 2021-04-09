@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient.config;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient.config;
 
 import java.util.ResourceBundle;
 

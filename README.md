@@ -48,7 +48,7 @@ We have now created a feature with the ID `MY-UNIQUE-FEATURE-ID`. The name is ju
 #### Issuing a license
 _System ID is only applicable for license version 2. Version 1 does not need a system ID_  
 
-To get the system ID for your system, simply
+To get the ID for your system, simply
 - run the IDGenerator
 - choose `MAC` from the `selector` on the left
 - copy the key from the text box on the right

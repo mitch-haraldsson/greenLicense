@@ -1,8 +1,8 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient.jfx.initializer;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient.jfx.initializer;
 
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.config.ProgramSettings;
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.jfx.IdGeneratorStageInitializer;
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.jfx.JfxResource;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.config.ProgramSettings;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.jfx.IdGeneratorStageInitializer;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.jfx.JfxResource;
 import de.shadowsoft.greenLicense.uiFramework.jfxframework.Controller;
 
 import java.util.Locale;

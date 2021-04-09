@@ -1,7 +1,7 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient;
 
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.controller.MainViewController;
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.jfx.initializer.MainViewInitializer;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.controller.MainViewController;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.jfx.initializer.MainViewInitializer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

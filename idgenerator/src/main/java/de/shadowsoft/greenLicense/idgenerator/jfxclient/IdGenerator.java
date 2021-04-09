@@ -1,6 +1,6 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient;
 
-import de.shadowsoft.greenLicense.idgeneratort.jfxclient.config.ProgramSettings;
+import de.shadowsoft.greenLicense.idgenerator.jfxclient.config.ProgramSettings;
 import javafx.application.Application;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

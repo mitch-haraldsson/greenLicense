@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient.config;
+package de.shadowsoft.greenLicense.idgenerator.jfxclient.config;
 
 import java.util.Locale;
 
@@ -16,8 +16,8 @@ public class ProgramSettings {
     private String programTitleBarPrefix;
 
     private ProgramSettings() {
-        programTitleBarPrefix = "Virgo license ID generator - ";
-        locale = new Locale("en", "US");
+        programTitleBarPrefix = "GreenLicense ID generator - ";
+        locale = Locale.getDefault();
     }
 
     public Locale getLocale() {

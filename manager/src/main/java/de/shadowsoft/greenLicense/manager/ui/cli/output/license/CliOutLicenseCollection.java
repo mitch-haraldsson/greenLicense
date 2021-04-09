@@ -1,6 +1,6 @@
 package de.shadowsoft.greenLicense.manager.ui.cli.output.license;
 
-import de.shadowsoft.greenLicense.manager.ui.cli.output.CliOutBase;
+import de.shadowsoft.greenLicense.core.cli.CliOutBase;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.manager.ui.cli.output;
+package de.shadowsoft.greenLicense.core.cli;
 
 import org.apache.logging.log4j.Logger;
 

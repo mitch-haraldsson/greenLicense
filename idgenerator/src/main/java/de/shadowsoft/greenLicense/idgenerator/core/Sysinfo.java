@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.idgeneratort.jfxclient;
+package de.shadowsoft.greenLicense.idgenerator.core;
 
 import java.util.Map;
 

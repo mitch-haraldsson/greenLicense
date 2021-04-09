@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.manager.ui.cli.output;
+package de.shadowsoft.greenLicense.core.cli;
 
 public class CliOutError {
 
