@@ -15,7 +15,7 @@ Green license is a tool to license your software against misuse. Like any other 
 - you can set a default value for every feature
 - choose your license version 
     - Version 1 lets you simply issue a license for your software 
-    - Version 2 also lets you bind your license to a single machine identified by mac addresses. With the "ID Generator" a license ID is generated which reflects the available mac addresses of a system. This is ID is coded into the license file. At least one mac address has to match for the license to be recognized as valid.
+    - Version 2 also lets you bind your license to a single machine identified by mac addresses. With the "ID Generator" a license ID is generated which reflects the available mac addresses of a system. This ID is coded into the license file. At least one MAC address has to match for the license to be recognized as valid.
     
 ### Issuing a license
 A license can be issued with the default values for a software or with custom values per license.
@@ -25,7 +25,7 @@ A license can be issued with the default values for a software or with custom va
 ```
 java -jar manager.jar keypair create --name "MyCoolSoftware Version 1.0" --size 4096
 ```
-This creates a key with the human-readable name "MyCoolSoftware Version 1" and a key size of 4096. As a result of this operation you receive an ID. Let's assume it is `3a6b01bd-5f11-4cbe-87c4-c527895728a9`. This ID is used to identify your key. Save this ID for the next step.
+This creates a key with the human-readable name "MyCoolSoftware Version 1.0" and a key size of 4096. As a result of this operation you receive an ID. Let's assume it is `3a6b01bd-5f11-4cbe-87c4-c527895728a9`. This ID is used to identify your key. Save this ID for the next step.
 
 Keep in mind, that the key is here to protect your software. This means, if you have "Software A", licensed by "Key A" and "Software B" also licensed by "Key A", then "Software B" will recognize a license for "Software A" also as valid. The only thing preventing a misuse here would be any feature you might evaluate.
 
@@ -46,14 +46,16 @@ java -jar manager.jar feature create --software "bc777bbe-dc44-4a8c-9b2b-23c7cfd
 We have now created a feature with the ID `MY-UNIQUE-FEATURE-ID`. The name is just for us, so we can identify this feature in the manager. The value is set to "true" per default. So our software needs to evaluate that value to see if the feature is enabled.
 
 #### Issuing a license
-Assuming we have received the ID `qwertyuiop` from the system where the software will be installed we are now able to issue the license. However, we want to disable our cool feature for this client.
+_System ID is only applicable for license version 2. Version 1 does not need a system ID_  
 
-To get the system ID for your system, simply 
+To get the system ID for your system, simply
 - run the IDGenerator
 - choose `MAC` from the `selector` on the left
 - copy the key from the text box on the right
 
-this is your `binding` for this license.
+This is your `binding` for this license.
+
+Assuming we have received the ID `qwertyuiop` from the system where the software will be installed we are now able to issue the license. However, we want to disable our new feature for this client.
 
 ```
 java -jar manager.jar license create --software bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007 --feature my-unique-feature-id=false --binding qwertyuiop --name "my first customer"
@@ -180,7 +182,7 @@ public class Example {
         GreenLicenseValidator validator = new GreenLicenseReaderV2(pk);
         try {
             GreenLicense license = validator.readLicenseFromFile("D:\\showcase\\greenLicense\\manager\\license\\test.lic");
-            if (license.isValid() && license.isValidSystem()) {
+            if (license.isValid()) {
                 System.out.println("License OK!");
                 for (Map.Entry<String, String> feature : license.getFeature().entrySet()) {
                     System.out.println(feature.getKey() + "=" + feature.getValue());
