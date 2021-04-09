@@ -195,9 +195,11 @@ public class Example {
 }
 ```
 
-`license.isValid()` checks if the signature of the license is correct. Nothing more. This tells you that the license has been created by the private key which belongs to the public key you have used for the reader.
+`license.isValid()` checks if the license is valid.
+ - correct header
+ - correct signature
+ - correct system (for license V2 only)
 
-`license.isValidSystem()` checks if the binding to the system is correct. In the current version, this reads the MAC addresses of the system and checks if at least one address is known.
 
 The features can be retrieved as a String map where the `key` is the feature ID
 and the `value` is the feature value.
