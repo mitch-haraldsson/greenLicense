@@ -10,7 +10,7 @@ impervious to circumvention, but it gives the attacker a good amount of work unt
 ### Creating a key pair
 
 - The private key is used to issue a license to your software.
-- The public key is distributed with your software. Hardcoded into the program.
+- The public key is distributed with your software.
 
 ### Manage software
 
@@ -18,8 +18,9 @@ impervious to circumvention, but it gives the attacker a good amount of work unt
 - Enter any amount of information you want to have in your software. It is always composed of an ID (the feature) and a
   value. For example how long the license is valid or what features are enabled.
 - you can set a default value for every feature
-- set a system identifier. This is to identify the system the license is valid for. Currently, available are
-    - Mac address (one must match)
+- set a system identifier. This is to identify the system the license is valid for. Or don't, so the license is valid
+  for every computer system. Currently, available are
+    - MAC address (one must match)
     - Hostname
     - IP address (one must match)
     - OS (String of `env.os` must match)
@@ -36,7 +37,7 @@ A license can be issued with the default values for a software or with custom va
 java -jar manager.jar keypair create --name "MyCoolSoftware Version 1.0" --size 4096
 ```
 
-This creates a key with the human-readable name "MyCoolSoftware Version 1.0" and a key size of 4096. As a result of this
+This creates a key with the human-readable name `MyCoolSoftware Version 1.0` and a key size of `4096`. As a result of this
 operation you receive an ID. Let's assume it is `3a6b01bd-5f11-4cbe-87c4-c527895728a9`. This ID is used to identify your
 key. Save this ID for the next step.
 
@@ -56,7 +57,7 @@ java -jar manager.jar software create --key "3a6b01bd-5f11-4cbe-87c4-c527895728a
 This creates a software with human-readable name `MyCoolSoftware` in Version `1.0`. Bound to the key
 pair `3a6b01bd-5f11-4cbe-87c4-c527895728a9`.
 
-Now let's assume the software we have just created got was created with the ID `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`.
+Now let's assume the software we have just created got the ID `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`.
 We will need this ID to create features.
 
 #### Create a feature
@@ -69,6 +70,8 @@ We have now created a feature with the ID `MY-UNIQUE-FEATURE-ID`. The name is ju
 feature in the manager. The value is set to "true" per default. So our software needs to evaluate that value to see if
 the feature is enabled.
 
+If no ID is set, a random UUID will be created. 
+
 #### Issuing a license
 
 To get the ID for your system, simply
@@ -79,7 +82,7 @@ To get the ID for your system, simply
 
 This is your `binding` for this license.
 
-Assuming we have received the ID `qwertyuiop` from the system where the software will be installed we are now able to
+Assuming we have received the ID `qwertyuiop` from the system where the software will be installed, we are now able to
 issue the license. However, we want to disable our new feature for this client.
 
 ```
@@ -94,7 +97,7 @@ to `false` in this license. The license has been bound to the system with the ID
 
 #### Exporting the license
 
-Now, we just have to export our license to a file we can send to the customer. For that we simply use
+Now, we just have to export our license to a file which we can send to the customer. For that we simply use
 
 ```
 java -jar manager.jar license export --license 093889a8-a87f-4619-83a4-7d99f380b682 --file "./licenses/my_first_customer.lic"
