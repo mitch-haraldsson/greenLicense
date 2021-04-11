@@ -1,7 +1,7 @@
 package de.shadowsoft.greenLicense.manager.ui.cli;
 
-import de.shadowsoft.greenLicense.core.cli.CliOutError;
-import de.shadowsoft.greenLicense.core.cli.tool.ConsoleWriter;
+import de.shadowsoft.greenLicense.common.cli.CliOutError;
+import de.shadowsoft.greenLicense.common.cli.tool.ConsoleWriter;
 import de.shadowsoft.greenLicense.manager.model.keypair.FssKeyPair;
 import de.shadowsoft.greenLicense.manager.model.keypair.KeyPairService;
 import de.shadowsoft.greenLicense.manager.model.software.Software;

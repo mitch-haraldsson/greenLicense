@@ -41,8 +41,8 @@ This creates a key with the human-readable name `MyCoolSoftware Version 1.0` and
 operation you receive an ID. Let's assume it is `3a6b01bd-5f11-4cbe-87c4-c527895728a9`. This ID is used to identify your
 key. Save this ID for the next step.
 
-Keep in mind, that the key is here to protect your software. This means, if you have "Software A", licensed by "Key A"
-and "Software B" also licensed by "Key A", then "Software B" will recognize a license for "Software A" also as valid.
+Keep in mind, that the key is here to protect your software. This means, if you have `Software A`, licensed by `Key A`
+and `Software B` also licensed by `Key A`, then `Software B` will recognize a license for `Software A` also as valid.
 The only thing preventing a misuse here would be any feature you might evaluate.
 
 So, it is good practice creating a new key pair for every software, or version you don't want to work with an older

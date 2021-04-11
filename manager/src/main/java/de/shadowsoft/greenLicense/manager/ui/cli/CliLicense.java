@@ -3,8 +3,8 @@ package de.shadowsoft.greenLicense.manager.ui.cli;
 
 import de.shadowsoft.greenLicense.common.license.generator.core.IdCreator;
 import de.shadowsoft.greenLicense.common.license.generator.core.generator.IdResult;
-import de.shadowsoft.greenLicense.core.cli.CliOutError;
-import de.shadowsoft.greenLicense.core.cli.tool.ConsoleWriter;
+import de.shadowsoft.greenLicense.common.cli.CliOutError;
+import de.shadowsoft.greenLicense.common.cli.tool.ConsoleWriter;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreator;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreatorBase;
 import de.shadowsoft.greenLicense.manager.model.license.License;

@@ -16,13 +16,13 @@ public class StringOps {
 
     public static String lastChar(String s) {
         if (s.length() > 0) {
-            return s.substring(s.length() - 1, s.length());
+            return s.substring(s.length() - 1);
         }
         return "";
     }
 
     public static String toHex(int i) {
-        return "0x" + Integer.toHexString(i).toUpperCase();
+        return String.format("0x%02X", i).toUpperCase();
     }
 
     public static String toHex(long l) {

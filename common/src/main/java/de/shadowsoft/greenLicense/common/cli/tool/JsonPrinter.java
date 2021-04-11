@@ -1,4 +1,4 @@
-package de.shadowsoft.greenLicense.core.cli.tool;
+package de.shadowsoft.greenLicense.common.cli.tool;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

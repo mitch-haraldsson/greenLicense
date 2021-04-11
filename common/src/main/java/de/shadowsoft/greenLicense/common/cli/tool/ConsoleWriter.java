@@ -1,12 +1,9 @@
-package de.shadowsoft.greenLicense.core.cli.tool;
+package de.shadowsoft.greenLicense.common.cli.tool;
 
-import de.shadowsoft.greenLicense.core.cli.CliOutBase;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import de.shadowsoft.greenLicense.common.cli.CliOutBase;
 
 public class ConsoleWriter {
 
-    private static final Logger LOGGER = LogManager.getLogger(ConsoleWriter.class);
 
     public static <T extends CliOutBase> void print(T msg) {
         print(msg, false);
@@ -14,7 +11,7 @@ public class ConsoleWriter {
 
     public static <T extends CliOutBase> void print(T msg, boolean useJson) {
         if (!useJson) {
-            System.out.println(msg.output(LOGGER));
+            System.out.println(msg.output());
         } else {
             System.out.println(new JsonPrinter().jsonPrinter(msg));
         }

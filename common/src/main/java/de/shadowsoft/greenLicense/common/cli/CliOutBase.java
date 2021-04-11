@@ -1,6 +1,4 @@
-package de.shadowsoft.greenLicense.core.cli;
-
-import org.apache.logging.log4j.Logger;
+package de.shadowsoft.greenLicense.common.cli;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +44,15 @@ public abstract class CliOutBase {
         this.success = success;
     }
 
-    public String output(Logger logger) {
-        return output(new StringBuilder(), logger);
+    public String output() {
+        return output(new StringBuilder());
     }
 
-    public String output(StringBuilder res, Logger logger) {
+    public String output(StringBuilder res) {
         res.append("\nSuccess: ").append(booleanToString(isSuccess()));
         res.append("\n");
         for (CliOutError error : getErrorMessages()) {
-            logger.error(error.getException() + ": " + error.getMessage());
+            res.append(error.getException()).append(": ").append(error.getMessage());
         }
         return formatOutput(res);
     }
