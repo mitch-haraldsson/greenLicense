@@ -76,24 +76,31 @@ If no ID is set, a random UUID will be created.
 
 To get the ID for your system, simply
 
-- run the IDGenerator
-- choose any item you want the licenses to be bound to from the selectors on the left
-- copy the key from the text box on the right
+```
+java -jar idgenerator.jar generate -m
+```
+
+This creates a binding for the network adapters and would result into something like
+```
+Selector: 0X01
+Binding:
+y8bHTxdJqZVlGWPLRGy8zg4pTf9JJdneQV2JR3+dThdDN3VjsASdy87WMDDOxss3yTbEFdg=
+```
 
 This is your `binding` for this license.
 
-Assuming we have received the ID `qwertyuiop` from the system where the software will be installed, we are now able to
+We have received the ID `y8bHTxdJqZVlGWPLRGy8zg4pTf9JJdneQV2JR3+dThdDN3VjsASdy87WMDDOxss3yTbEFdg=` from the system where the software will be installed, we are now able to
 issue the license. However, we want to disable our new feature for this client.
 
 ```
-java -jar manager.jar license create --software bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007 --feature my-unique-feature-id=false --binding qwertyuiop --name "my first customer"
+java -jar manager.jar license create --software bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007 --feature my-unique-feature-id=false --binding "y8bHTxdJqZVlGWPLRGy8zg4pTf9JJdneQV2JR3+dThdDN3VjsASdy87WMDDOxss3yTbEFdg=" --name "my first customer"
 ```
 
 If `binding` is omitted then the license will not be bound to a system and every system will be valid.
 
 Here we go. Our license has been issued (let's assume with ID `093889a8-a87f-4619-83a4-7d99f380b682`)
 to `my first customer` for software `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`. Feature `my-unique-feature-id` has been set
-to `false` in this license. The license has been bound to the system with the ID `qwertyuiop`.
+to `false` in this license. The license has been bound to the system with the ID `y8bHTxdJqZVlGWPLRGy8zg4pTf9JJdneQV2JR3+dThdDN3VjsASdy87WMDDOxss3yTbEFdg=`.
 
 #### Exporting the license
 
