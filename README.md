@@ -131,7 +131,7 @@ Will produce a json output with everything you need to know. Including your lice
       "filePath": "D:\\showcase\\greenLicense\\manager\\.\\licenses\\my_first_customer.lic",
       "license": {
         "id": "093889a8-a87f-4619-83a4-7d99f380b682",
-        "systemId": "qwertyuiop",
+        "systemId": "y8bHTxdJqZVlGWPLRGy8zg4pTf9JJdneQV2JR3+dThdDN3VjsASdy87WMDDOxss3yTbEFdg=",
         "name": "my first customer",
         "software": {
           "features": [
