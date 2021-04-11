@@ -1,5 +1,6 @@
 package de.shadowsoft.greenLicense.manager.model.software;
 
+import de.shadowsoft.greenLicense.manager.config.ConfigService;
 import de.shadowsoft.greenLicense.manager.tools.serializer.Persistor;
 import de.shadowsoft.greenLicense.manager.tools.serializer.exception.DataLoadingException;
 import de.shadowsoft.greenLicense.manager.ui.jfxclient.ClassCreator;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SoftwareService {
-    private static final String SAVE_PATH = "./data/software.dat";
+    private static final String SAVE_PATH = "data/software.json";
     private static SoftwareService instance;
 
     public static SoftwareService getInstance() throws IOException, DataLoadingException {
@@ -52,8 +53,12 @@ public class SoftwareService {
         return map.getOrDefault(id, null);
     }
 
+    private File getSoftwareFile() {
+        return new File(ConfigService.getInstance().getSettings().getBasePath() + SAVE_PATH);
+    }
+
     public void reload() throws IOException, DataLoadingException {
-        Persistor persistor = ClassCreator.getPersistor(new File(SAVE_PATH));
+        Persistor persistor = ClassCreator.getPersistor(getSoftwareFile());
         data = persistor.load(SoftwareData.class);
         remap();
     }
@@ -84,7 +89,7 @@ public class SoftwareService {
     }
 
     public boolean save() throws IOException {
-        Persistor persistor = ClassCreator.getPersistor(new File(SAVE_PATH));
+        Persistor persistor = ClassCreator.getPersistor(getSoftwareFile());
         return persistor.save(data);
     }
 }

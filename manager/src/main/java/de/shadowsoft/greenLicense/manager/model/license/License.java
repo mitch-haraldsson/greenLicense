@@ -7,13 +7,13 @@ import java.util.UUID;
 public class License {
 
     private String id;
-    private String licenseId;
     private String name;
     private Software software;
+    private String systemId;
 
     public License() {
         id = UUID.randomUUID().toString();
-        licenseId = "";
+        systemId = "";
         name = "";
         software = new Software();
     }
@@ -24,14 +24,6 @@ public class License {
 
     public void setId(final String id) {
         this.id = id;
-    }
-
-    public String getLicenseId() {
-        return licenseId;
-    }
-
-    public void setLicenseId(final String licenseId) {
-        this.licenseId = licenseId;
     }
 
     public String getName() {
@@ -48,6 +40,14 @@ public class License {
 
     public void setSoftware(final Software software) {
         this.software = software;
+    }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(final String systemId) {
+        this.systemId = systemId;
     }
 
 }

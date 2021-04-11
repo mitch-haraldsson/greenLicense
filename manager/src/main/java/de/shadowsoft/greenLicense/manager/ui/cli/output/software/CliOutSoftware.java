@@ -14,7 +14,6 @@ public class CliOutSoftware {
 
     public CliOutSoftware(Software software) {
         this.id = software.getId();
-        this.licenseVersion = software.getLicenseVersion().toShortString();
         this.name = software.getName();
         this.version = software.getVersion();
     }

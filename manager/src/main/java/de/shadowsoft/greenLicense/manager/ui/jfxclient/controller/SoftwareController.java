@@ -133,7 +133,6 @@ public class SoftwareController extends LicenseManagerController {
             software.setKeyPairId(selectedKeyPair.getId());
             software.setVersion(txtVersion.getText());
             software.setName(txtSoftwareName.getText());
-            software.setLicenseVersion(selectedLicenseVersion);
             try {
                 SoftwareService.getInstance().addSoftware(software);
                 txtVersion.setText("");

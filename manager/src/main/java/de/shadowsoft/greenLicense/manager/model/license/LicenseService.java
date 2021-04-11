@@ -1,16 +1,16 @@
 package de.shadowsoft.greenLicense.manager.model.license;
 
+import de.shadowsoft.greenLicense.manager.config.ConfigService;
 import de.shadowsoft.greenLicense.manager.tools.serializer.Persistor;
 import de.shadowsoft.greenLicense.manager.tools.serializer.exception.DataLoadingException;
 import de.shadowsoft.greenLicense.manager.ui.jfxclient.ClassCreator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 public class LicenseService {
-    private static final String SAVE_PATH = "./data/licenses.dat";
+    private static final String SAVE_PATH = "data/licenses.json";
     private static LicenseService instance;
 
     public static LicenseService getInstance() throws IOException, DataLoadingException {
@@ -53,8 +53,12 @@ public class LicenseService {
         return null;
     }
 
+    private File getLicenseFile() {
+        return new File(ConfigService.getInstance().getSettings().getBasePath() + SAVE_PATH);
+    }
+
     public void reload() throws IOException, DataLoadingException {
-        Persistor persistor = ClassCreator.getPersistor(new File(SAVE_PATH));
+        Persistor persistor = ClassCreator.getPersistor(getLicenseFile());
         data = persistor.load(LicenseData.class);
     }
 
@@ -63,18 +67,12 @@ public class LicenseService {
     }
 
     public boolean remove(final String id) throws IOException {
-        Iterator<License> it = data.getLicenses().iterator();
-        while (it.hasNext()) {
-            License license = it.next();
-            if (license.getId().equals(id)) {
-                it.remove();
-            }
-        }
+        data.getLicenses().removeIf(license -> license.getId().equals(id));
         return save();
     }
 
     public boolean save() throws IOException {
-        Persistor persistor = ClassCreator.getPersistor(new File(SAVE_PATH));
+        Persistor persistor = ClassCreator.getPersistor(getLicenseFile());
         return persistor.save(data);
     }
 

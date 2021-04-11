@@ -1,11 +1,11 @@
-package de.shadowsoft.greenLicense.common.license.generator.mac;
+package de.shadowsoft.greenLicense.common.license.generator.core;
 
 
-public class MacEncrypt extends MacCrypt {
+public class ResultEncrypt extends ResultCrypt {
 
     private final byte[] mac;
 
-    public MacEncrypt(final byte[] mac) {
+    public ResultEncrypt(final byte[] mac) {
         this.mac = mac;
     }
 

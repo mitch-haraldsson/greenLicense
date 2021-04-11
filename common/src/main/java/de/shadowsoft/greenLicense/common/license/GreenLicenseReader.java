@@ -1,77 +1,156 @@
 package de.shadowsoft.greenLicense.common.license;
 
+import de.shadowsoft.greenLicense.common.crypto.AESCrypt;
+import de.shadowsoft.greenLicense.common.exception.DecryptionException;
+import de.shadowsoft.greenLicense.common.exception.InvalidSignatureException;
+import de.shadowsoft.greenLicense.common.exception.SystemValidationException;
+import de.shadowsoft.greenLicense.common.license.generator.Generator;
+import de.shadowsoft.greenLicense.common.license.generator.core.ResultCondenser;
+import de.shadowsoft.greenLicense.common.license.generator.core.ResultDecrypt;
+import de.shadowsoft.greenLicense.common.license.generator.core.SysInfo;
+import de.shadowsoft.greenLicense.common.license.generator.core.generator.IdResult;
+
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
+import java.util.List;
 
-public abstract class GreenLicenseReader implements GreenLicenseValidator {
-    private final byte[] pk;
+public class GreenLicenseReader extends GreenLicenseReaderBase {
+    private static final int MAGIC_BYTES = 1645570800;
 
     public GreenLicenseReader(final byte[] pk) {
-        this.pk = pk;
+        super(pk);
     }
 
-    protected final byte[] decrypt(final byte[] cipherText, final PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        final Cipher decryptCipher = Cipher.getInstance("RSA");
-        decryptCipher.init(Cipher.DECRYPT_MODE, publicKey);
-        return decryptCipher.doFinal(cipherText);
-    }
-
-    protected final SecretKey getKey(final byte[] encodedKey) {
-        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
-    }
-
-    public byte[] getPk() {
-        return pk;
-    }
-
-    protected final Map<String, String> payloadToMap(final String payload) {
-        final Map<String, String> features = new HashMap<>();
-        final String[] lines = payload.split("\n");
-        if (lines.length > 1) {
-            String id = "";
-            for (final String line : lines) {
-                final String[] featureParts = line.split(":");
-                id = featureParts[0];
-                boolean isFirst = true;
-                String feature = "";
-                for (int i = 1; i < featureParts.length; i++) {
-                    if (!isFirst) {
-                        feature = feature.concat(":");
-                    }
-                    isFirst = false;
-                    feature = feature.concat(featureParts[i]);
+    private boolean byteArrayListCompareSingleItemMatch(final List<byte[]> validBytes, final List<byte[]> sysBytes) {
+        for (byte[] sysByte : sysBytes) {
+            for (byte[] validByte : validBytes) {
+                if (Arrays.equals(sysByte, validByte)) {
+                    return true;
                 }
-                features.put(id, feature);
             }
         }
-        return features;
+        return false;
+    }
+
+    private boolean checkValidSystem(final byte[] licenseId) throws SystemValidationException {
+        SysInfo info = new SysInfo();
+        Generator generator = new ResultDecrypt(licenseId);
+        ResultCondenser condenser = new ResultCondenser();
+        IdResult res;
+        try {
+            Thread t = new Thread(generator);
+            t.start();
+            t.join();
+            res = condenser.vaporize(generator.getResult());
+        } catch (IOException | InterruptedException e) {
+            throw new SystemValidationException("Unable to re-vaporize system ID", e);
+        }
+
+        boolean isValid = true;
+        String selectorString = String.format("%8s", Integer.toBinaryString(res.getSelector() & 0xFF)).replace(' ', '0');
+
+        try {
+            for (int i = 0; i < selectorString.length(); i++) {
+                if (selectorString.charAt(i) == '1') {
+                    switch (i) {
+                        case 7:
+                            if (!hasValidMacAddress(res.getMacs(), info.getMacAddresses())) {
+                                isValid = false;
+                            }
+                            break;
+
+                        case 6:
+                            if (!Arrays.equals(res.getHostname(), info.getComputerName().getBytes())) {
+                                isValid = false;
+                            }
+                            break;
+
+                        case 5:
+                            if (!hasValidIpAddress(res.getIp(), info.getAllIps())) {
+                                isValid = false;
+                            }
+                            break;
+
+                        case 4:
+                            if (!Arrays.equals(res.getOs(), info.getOs().getBytes())) {
+                                isValid = false;
+                            }
+                            break;
+                    }
+                }
+            }
+        } catch (NullPointerException npe) {
+            throw new SystemValidationException("Unable to verify system. No attribute found for given selector", npe);
+        } catch (SocketException e) {
+            throw new SystemValidationException("Unable to read sockets of network adapters", e);
+        }
+        return isValid;
+    }
+
+    private boolean hasValidIpAddress(final List<byte[]> ips, final List<byte[]> sysIps) {
+        return byteArrayListCompareSingleItemMatch(ips, sysIps);
+    }
+
+    private boolean hasValidMacAddress(final List<byte[]> validMacs, final List<byte[]> sysMacs) {
+        return byteArrayListCompareSingleItemMatch(validMacs, sysMacs);
     }
 
     @Override
-    public final GreenLicense readLicenseFromFile(final String path) throws IOException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, SignatureException, InvalidKeySpecException, InterruptedException {
-        return readLicense(Files.readAllBytes(Paths.get(path)));
-    }
+    public GreenLicense readLicense(final byte[] lic) throws SystemValidationException, DecryptionException, InvalidSignatureException {
+        final GreenLicense license = new GreenLicense();
+        final int magicBytes = ByteBuffer.wrap(lic).getInt(0);
+        final int encLength = ByteBuffer.wrap(lic).getInt(4);
+        int lastReadPos = 8;
+        final byte[] secretKeyByte = Arrays.copyOfRange(lic, lastReadPos, lastReadPos + encLength);
+        lastReadPos += encLength;
+        final int payloadLength = ByteBuffer.wrap(lic).getInt(lastReadPos);
+        lastReadPos += 4;
+        final byte[] encPayload = Arrays.copyOfRange(lic, lastReadPos, lastReadPos + payloadLength);
+        lastReadPos += payloadLength;
+        final int toCheckLength = lastReadPos;
+        final int signatureLength = ByteBuffer.wrap(lic).getInt(lastReadPos);
+        lastReadPos += 4;
+        final byte[] sigByte = Arrays.copyOfRange(lic, lastReadPos, lastReadPos + signatureLength);
+        final byte[] toCheck = Arrays.copyOfRange(lic, 0, toCheckLength);
 
-    protected final boolean verify(final byte[] plainText, final byte[] signature, final PublicKey publicKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        final Signature publicSignature = Signature.getInstance("SHA256withRSA");
-        publicSignature.initVerify(publicKey);
-        publicSignature.update(plainText);
-        return publicSignature.verify(signature);
+        final byte[] decPayload;
+        final PublicKey publicKey;
+
+        try {
+            publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(getPk()));
+            final AESCrypt aesDec = new AESCrypt(getKey(decrypt(secretKeyByte, publicKey)));
+            decPayload = aesDec.decrypt(encPayload);
+        } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | InvalidKeySpecException | IllegalBlockSizeException e) {
+            throw new DecryptionException("Unable to decrypt payload", e);
+        }
+        final int licenseLength = ByteBuffer.wrap(decPayload).getInt(0);
+        lastReadPos = 4;
+        final byte[] licensePayload = Arrays.copyOfRange(decPayload, lastReadPos, lastReadPos + licenseLength);
+        lastReadPos += licenseLength;
+        final int licenseIdLength = ByteBuffer.wrap(decPayload).getInt(lastReadPos);
+        lastReadPos += 4;
+        final byte[] licenseId = Arrays.copyOfRange(decPayload, lastReadPos, lastReadPos + licenseIdLength);
+        try {
+            license.setValidSignature(verify(toCheck, sigByte, publicKey));
+        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            throw new InvalidSignatureException("The signature is invalid", e);
+        }
+        license.setValidMagicBytes(magicBytes == MAGIC_BYTES);
+        license.setFeature(payloadToMap(new String(licensePayload)));
+        license.setValidSystem(checkValidSystem(licenseId));
+        return license;
     }
 }
     

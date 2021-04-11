@@ -12,7 +12,7 @@ public class CliOutLicense {
 
     public CliOutLicense(License license) {
         this.id = license.getId();
-        this.licenseId = license.getLicenseId();
+        this.licenseId = license.getSystemId();
         this.name = license.getName();
         this.software = license.getSoftware().getName();
         this.softwareId = license.getSoftware().getId();

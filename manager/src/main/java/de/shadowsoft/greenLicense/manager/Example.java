@@ -1,17 +1,13 @@
 package de.shadowsoft.greenLicense.manager;
 
+import de.shadowsoft.greenLicense.common.exception.DecryptionException;
+import de.shadowsoft.greenLicense.common.exception.InvalidSignatureException;
+import de.shadowsoft.greenLicense.common.exception.SystemValidationException;
 import de.shadowsoft.greenLicense.common.license.GreenLicense;
-import de.shadowsoft.greenLicense.common.license.GreenLicenseReaderV2;
+import de.shadowsoft.greenLicense.common.license.GreenLicenseReader;
 import de.shadowsoft.greenLicense.common.license.GreenLicenseValidator;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 
 public class Example {
@@ -56,7 +52,7 @@ public class Example {
     };
 
     public static void main(String[] args) {
-        GreenLicenseValidator validator = new GreenLicenseReaderV2(pk);
+        GreenLicenseValidator validator = new GreenLicenseReader(pk);
         try {
             GreenLicense license = validator.readLicenseFromFile("D:\\showcase\\greenLicense\\manager\\license\\test.lic");
             if (license.isValid()) {
@@ -67,12 +63,10 @@ public class Example {
             } else {
                 System.err.println("License invalid!");
             }
-        } catch (IllegalBlockSizeException | InvalidKeyException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | SignatureException | InvalidKeySpecException | InterruptedException | IOException e) {
+        } catch (IOException | DecryptionException | SystemValidationException | InvalidSignatureException e) {
             e.printStackTrace();
         }
     }
-
-
 }
     
     

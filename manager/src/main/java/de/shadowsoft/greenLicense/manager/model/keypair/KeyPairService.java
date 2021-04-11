@@ -1,8 +1,9 @@
 package de.shadowsoft.greenLicense.manager.model.keypair;
 
-import de.shadowsoft.greenLicense.manager.ui.jfxclient.ClassCreator;
+import de.shadowsoft.greenLicense.manager.config.ConfigService;
 import de.shadowsoft.greenLicense.manager.tools.serializer.Persistor;
 import de.shadowsoft.greenLicense.manager.tools.serializer.exception.DataLoadingException;
+import de.shadowsoft.greenLicense.manager.ui.jfxclient.ClassCreator;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.util.UUID;
 public class KeyPairService {
 
     public static final String ALGORITHM = "RSA";
-    private static final String SAVE_PATH = "./data/keyPairs.dat";
+    private static final String SAVE_PATH = "data/keyPairs.json";
     private static KeyPairService instance;
 
     public static KeyPairService getInstance() throws IOException, DataLoadingException {
@@ -81,6 +82,10 @@ public class KeyPairService {
         return map.getOrDefault(id, null);
     }
 
+    private File getKeyPairFile() {
+        return new File(ConfigService.getInstance().getSettings().getBasePath() + SAVE_PATH);
+    }
+
     public PrivateKey loadPrivateKey(String key64) throws GeneralSecurityException {
         byte[] clear = Base64.getDecoder().decode(key64);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(clear);
@@ -98,7 +103,7 @@ public class KeyPairService {
     }
 
     private void refreshData() throws IOException, DataLoadingException {
-        Persistor persistor = ClassCreator.getPersistor(new File(SAVE_PATH));
+        Persistor persistor = ClassCreator.getPersistor(getKeyPairFile());
         data = persistor.load(KeyPairData.class);
         remap();
     }
@@ -123,7 +128,7 @@ public class KeyPairService {
     }
 
     public void save() throws IOException {
-        Persistor persistor = ClassCreator.getPersistor(new File(SAVE_PATH));
+        Persistor persistor = ClassCreator.getPersistor(getKeyPairFile());
         persistor.save(data);
     }
 

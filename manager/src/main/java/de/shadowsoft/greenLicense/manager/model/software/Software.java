@@ -1,7 +1,5 @@
 package de.shadowsoft.greenLicense.manager.model.software;
 
-import de.shadowsoft.greenLicense.common.license.LicenseVersion;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +9,6 @@ public class Software {
     private List<Feature> features;
     private String id;
     private String keyPairId;
-    private LicenseVersion licenseVersion;
     private String name;
     private String version;
 
@@ -21,7 +18,6 @@ public class Software {
         keyPairId = "";
         name = "";
         version = "";
-        licenseVersion = LicenseVersion.LICENSE_V1;
     }
 
     public void addFeature(Feature feature) {
@@ -36,7 +32,6 @@ public class Software {
         software.setKeyPairId(keyPairId);
         software.setName(name);
         software.setVersion(version);
-        software.setLicenseVersion(licenseVersion);
         for (Feature feature : features) {
             software.getFeatures().add(feature.clone());
         }
@@ -70,14 +65,6 @@ public class Software {
 
     public void setKeyPairId(final String keyPairId) {
         this.keyPairId = keyPairId;
-    }
-
-    public LicenseVersion getLicenseVersion() {
-        return licenseVersion;
-    }
-
-    public void setLicenseVersion(final LicenseVersion licenseVersion) {
-        this.licenseVersion = licenseVersion;
     }
 
     public String getName() {

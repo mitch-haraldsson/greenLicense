@@ -1,81 +1,118 @@
 # greenLicense
 
-Green license is a tool to license your software against misuse. Like any other piece of license software it is not impervious to circumvention, but it gives the attacker a good amount of work until they acquire ONE free version.
+Green license is a tool to license your software against misuse. Like any other piece of license software it is not
+impervious to circumvention, but it gives the attacker a good amount of work until they acquire ONE free version.
 
 # How does it work?
+
 ## The manager
 
-###  Creating a key pair 
+### Creating a key pair
+
 - The private key is used to issue a license to your software.
 - The public key is distributed with your software. Hardcoded into the program.
-    
+
 ### Manage software
-- Create a software and assign a key to it. 
-- Enter any amount of information you want to have in your software. It is always composed of an ID (the feature) and a value. For example how long the license is valid or what features are enabled.
+
+- Create a software and assign a key to it.
+- Enter any amount of information you want to have in your software. It is always composed of an ID (the feature) and a
+  value. For example how long the license is valid or what features are enabled.
 - you can set a default value for every feature
-- choose your license version 
-    - Version 1 lets you simply issue a license for your software 
-    - Version 2 also lets you bind your license to a single machine identified by mac addresses. With the "ID Generator" a license ID is generated which reflects the available mac addresses of a system. This ID is coded into the license file. At least one MAC address has to match for the license to be recognized as valid.
-    
+- set a system identifier. This is to identify the system the license is valid for. Currently, available are
+    - Mac address (one must match)
+    - Hostname
+    - IP address (one must match)
+    - OS (String of `env.os` must match)
+
 ### Issuing a license
+
 A license can be issued with the default values for a software or with custom values per license.
-    
+
 ### CLI EXAMPLES
+
 #### Create a key pair
+
 ```
 java -jar manager.jar keypair create --name "MyCoolSoftware Version 1.0" --size 4096
 ```
-This creates a key with the human-readable name "MyCoolSoftware Version 1.0" and a key size of 4096. As a result of this operation you receive an ID. Let's assume it is `3a6b01bd-5f11-4cbe-87c4-c527895728a9`. This ID is used to identify your key. Save this ID for the next step.
 
-Keep in mind, that the key is here to protect your software. This means, if you have "Software A", licensed by "Key A" and "Software B" also licensed by "Key A", then "Software B" will recognize a license for "Software A" also as valid. The only thing preventing a misuse here would be any feature you might evaluate.
+This creates a key with the human-readable name "MyCoolSoftware Version 1.0" and a key size of 4096. As a result of this
+operation you receive an ID. Let's assume it is `3a6b01bd-5f11-4cbe-87c4-c527895728a9`. This ID is used to identify your
+key. Save this ID for the next step.
 
-So, it is good practice creating a new key pair for every software, or version you don't want to work with an older license.
+Keep in mind, that the key is here to protect your software. This means, if you have "Software A", licensed by "Key A"
+and "Software B" also licensed by "Key A", then "Software B" will recognize a license for "Software A" also as valid.
+The only thing preventing a misuse here would be any feature you might evaluate.
+
+So, it is good practice creating a new key pair for every software, or version you don't want to work with an older
+license.
 
 #### Create a software
+
 ```
 java -jar manager.jar software create --key "3a6b01bd-5f11-4cbe-87c4-c527895728a9" --license 2 --name "MyCoolSoftware" --version "1.0"
 ```
-This creates a software for license version "2" (the one that needs a system ID) with human-readable name "MyCoolSoftware" in Version "1.0". Bound to the key `3a6b01bd-5f11-4cbe-87c4-c527895728a9`.
 
-Now let's assume the software we have just created got was created with the ID `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`. We will need this ID to create features.
+This creates a software with human-readable name `MyCoolSoftware` in Version `1.0`. Bound to the key
+pair `3a6b01bd-5f11-4cbe-87c4-c527895728a9`.
+
+Now let's assume the software we have just created got was created with the ID `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`.
+We will need this ID to create features.
 
 #### Create a feature
+
 ```
 java -jar manager.jar feature create --software "bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007" --id "MY-UNIQUE-FEATURE-ID" --name "MyFeature" --default "true"
 ```
-We have now created a feature with the ID `MY-UNIQUE-FEATURE-ID`. The name is just for us, so we can identify this feature in the manager. The value is set to "true" per default. So our software needs to evaluate that value to see if the feature is enabled.
+
+We have now created a feature with the ID `MY-UNIQUE-FEATURE-ID`. The name is just for us, so we can identify this
+feature in the manager. The value is set to "true" per default. So our software needs to evaluate that value to see if
+the feature is enabled.
 
 #### Issuing a license
-_System ID is only applicable for license version 2. Version 1 does not need a system ID_  
 
 To get the ID for your system, simply
+
 - run the IDGenerator
-- choose `MAC` from the `selector` on the left
+- choose any item you want the licenses to be bound to from the selectors on the left
 - copy the key from the text box on the right
 
 This is your `binding` for this license.
 
-Assuming we have received the ID `qwertyuiop` from the system where the software will be installed we are now able to issue the license. However, we want to disable our new feature for this client.
+Assuming we have received the ID `qwertyuiop` from the system where the software will be installed we are now able to
+issue the license. However, we want to disable our new feature for this client.
 
 ```
 java -jar manager.jar license create --software bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007 --feature my-unique-feature-id=false --binding qwertyuiop --name "my first customer"
 ```
-Here we go. Our license has been issued (let's assume with ID `093889a8-a87f-4619-83a4-7d99f380b682`) to `my first customer` on software `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`.
-Feature `my-unique-feature-id` has been set to `false` in this license. The license has been bound to the system with the ID `qwertyuiop`.
-    
-#### Exporting the license  
+
+If `binding` is omitted then the license will not be bound to a system and every system will be valid.
+
+Here we go. Our license has been issued (let's assume with ID `093889a8-a87f-4619-83a4-7d99f380b682`)
+to `my first customer` for software `bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007`. Feature `my-unique-feature-id` has been set
+to `false` in this license. The license has been bound to the system with the ID `qwertyuiop`.
+
+#### Exporting the license
+
 Now, we just have to export our license to a file we can send to the customer. For that we simply use
+
 ```
 java -jar manager.jar license export --license 093889a8-a87f-4619-83a4-7d99f380b682 --file "./licenses/my_first_customer.lic"
 ```
-License `093889a8-a87f-4619-83a4-7d99f380b682` is being exported to `./licenses/my_first_customer.lic`. 
+
+License `093889a8-a87f-4619-83a4-7d99f380b682` is being exported to `./licenses/my_first_customer.lic`.
 
 #### Automation
-Of course we have automation in mind. You can use the `-j` or `--json` switch in the CLI to receive a JSON result and process it to your liking.
+
+Of course, we have automation in mind. You can use the `-j` or `--json` switch in the CLI to receive a JSON result and
+process it to your liking.
+
 ```
 java -jar manager.jar license export --license 093889a8-a87f-4619-83a4-7d99f380b682 --file "./licenses/my_first_customer.lic" --json
 ```
+
 Will produce a json output with everything you need to know. Including your license in Base64-Format.
+
 ```
 {
   "exports": [
@@ -84,7 +121,7 @@ Will produce a json output with everything you need to know. Including your lice
       "filePath": "D:\\showcase\\greenLicense\\manager\\.\\licenses\\my_first_customer.lic",
       "license": {
         "id": "093889a8-a87f-4619-83a4-7d99f380b682",
-        "licenseId": "qwertyuiop",
+        "systemId": "qwertyuiop",
         "name": "my first customer",
         "software": {
           "features": [
@@ -96,7 +133,6 @@ Will produce a json output with everything you need to know. Including your lice
           ],
           "id": "bc777bbe-dc44-4a8c-9b2b-23c7cfd5a007",
           "keyPairId": "3a6b01bd-5f11-4cbe-87c4-c527895728a9",
-          "licenseVersion": "LICENSE_V2",
           "name": "MyCoolSoftware",
           "version": "1.0"
         }
@@ -109,13 +145,13 @@ Will produce a json output with everything you need to know. Including your lice
 ```
 
 ## The reader
-How to use the license reader in my software?
-First you have to include the `common`-module in your project.
 
-Most important for you is the interface `GreenLicenseValidator`. This interface takes either `GreenLicenseReaderV1` or `GreenLicenseReaderV2`. Where the first reads V1-Licenses and the latter V2-Licenses (the ones with the system ID).
+How to use the license reader in my software? First you have to include the `common`-module in your project.
 
 ### Example - reading license from file
+
 Get the public key as bytes with the following command:
+
 ```
 java -jar manager.jar keypair show --id 3a6b01bd-5f11-4cbe-87c4-c527895728a9 -b
 ```
@@ -123,18 +159,15 @@ java -jar manager.jar keypair show --id 3a6b01bd-5f11-4cbe-87c4-c527895728a9 -b
 Take the byte output and hard code it into your program just like in the example class below:
 
 ```
+
+import de.shadowsoft.greenLicense.common.exception.DecryptionException;
+import de.shadowsoft.greenLicense.common.exception.InvalidSignatureException;
+import de.shadowsoft.greenLicense.common.exception.SystemValidationException;
 import de.shadowsoft.greenLicense.common.license.GreenLicense;
-import de.shadowsoft.greenLicense.common.license.GreenLicenseReaderV2;
+import de.shadowsoft.greenLicense.common.license.GreenLicenseReader;
 import de.shadowsoft.greenLicense.common.license.GreenLicenseValidator;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 
 public class Example {
@@ -179,7 +212,7 @@ public class Example {
     };
 
     public static void main(String[] args) {
-        GreenLicenseValidator validator = new GreenLicenseReaderV2(pk);
+        GreenLicenseValidator validator = new GreenLicenseReader(pk);
         try {
             GreenLicense license = validator.readLicenseFromFile("D:\\showcase\\greenLicense\\manager\\license\\test.lic");
             if (license.isValid()) {
@@ -190,7 +223,7 @@ public class Example {
             } else {
                 System.err.println("License invalid!");
             }
-        } catch (IllegalBlockSizeException | InvalidKeyException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | SignatureException | InvalidKeySpecException | InterruptedException | IOException e) {
+        } catch (IOException | DecryptionException | SystemValidationException | InvalidSignatureException e) {
             e.printStackTrace();
         }
     }
@@ -198,13 +231,13 @@ public class Example {
 ```
 
 `license.isValid()` checks if the license is valid.
- - correct header
- - correct signature
- - correct system (for license V2 only)
 
+- correct header
+- correct signature
+- correct system (if bound)
 
-The features can be retrieved as a String map where the `key` is the feature ID
-and the `value` is the feature value.
+The features can be retrieved as a String map where the `key` is the feature ID and the `value` is the feature value.
 
 # Known issues
-- Currently, there seems to be an error when reading the Base64 codes license.
+
+- none so far

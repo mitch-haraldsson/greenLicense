@@ -14,7 +14,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.util.Base64;
 
-public class LicenseCreatorV1 extends LicenseCreator {
+public class LicenseCreatorV1 extends LicenseCreatorBase {
     public static int MAGIC_BYTES = 1027728000;
 
     @Override
@@ -31,7 +31,7 @@ public class LicenseCreatorV1 extends LicenseCreator {
             out.write(intToByte(MAGIC_BYTES));
             out.write(intToByte(encSecKey.length));
             out.write(encSecKey);
-            byte[] encMsg = encAes.encrypt(getPayloadV1(license).getBytes());
+            byte[] encMsg = encAes.encrypt(featureBuilder(license).getBytes());
             out.write(encMsg);
             byte[] signature = sign(out.toByteArray(), pair.getPrivate());
             String signatureHead = "$";

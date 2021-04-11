@@ -1,9 +1,9 @@
-package de.shadowsoft.greenLicense.common.license.generator.mac;
+package de.shadowsoft.greenLicense.common.license.generator.core;
 
 
 import de.shadowsoft.greenLicense.common.license.generator.Generator;
 
-public abstract class MacCrypt extends Generator {
+public abstract class ResultCrypt extends Generator {
     protected final byte[] getEncryptionSequence() {
         return new byte[]{
                 (byte) 0x34, (byte) 0x39, (byte) 0x38, ~(byte) 0x62, (byte) 0x37, (byte) 0x30, (byte) 0x34, (byte) 0x62, ~(byte) 0x65, ~(byte) 0x34, ~(byte) 0x34, (byte) 0x35, (byte) 0x33, (byte) 0x33, (byte) 0x61,

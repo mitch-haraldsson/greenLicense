@@ -1,61 +1,60 @@
 package de.shadowsoft.greenLicense.manager.license;
 
 import de.shadowsoft.greenLicense.manager.exceptions.NoSuchKeyPairException;
+import de.shadowsoft.greenLicense.manager.model.keypair.FssKeyPair;
+import de.shadowsoft.greenLicense.manager.model.keypair.KeyPairService;
 import de.shadowsoft.greenLicense.manager.model.license.License;
-import de.shadowsoft.greenLicense.manager.model.software.Feature;
 import de.shadowsoft.greenLicense.manager.tools.serializer.exception.DataLoadingException;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.security.SignatureException;
+import java.security.KeyPair;
 
-public abstract class LicenseCreator {
+public class LicenseCreator extends LicenseCreatorBase {
+    private static final Logger LOGGER = LogManager.getLogger(LicenseCreator.class);
+    public static int MAGIC_BYTES = 1645570800;
 
+    @Override
+    public byte[] createLicense(final License license) throws GeneralSecurityException, NoSuchKeyPairException, IOException, DataLoadingException, InterruptedException {
 
-    abstract public byte[] createLicense(License license) throws GeneralSecurityException, NoSuchKeyPairException, IOException, DataLoadingException;
+/*
+License scheme:
+    <magic byte>
+    <key length><key>
+    <payload length>
+        <license length><license>
+        <ID length><ID>
+    <signature length><signature>
+  */
+        FssKeyPair fssKeyPair = KeyPairService.getInstance().getKeyById(license.getSoftware().getKeyPairId());
+        if (fssKeyPair != null) {
+            KeyPair pair = fssKeyPair.getKeyPair();
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(256);
+            SecretKey secretKey = keyGen.generateKey();
+            byte[] encSecKey = encrypt(secretKey.getEncoded(), pair.getPrivate());
+            AESCrypt encAes = new AESCrypt(secretKey);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            out.write(intToByte(MAGIC_BYTES));
+            out.write(intToByte(encSecKey.length));
+            out.write(encSecKey);
+            byte[] encMsg = encAes.encrypt(getPayload(license));
+            out.write(intToByte(encMsg.length));
+            out.write(encMsg);
+            byte[] signature = sign(out.toByteArray(), pair.getPrivate());
 
-    protected byte[] encrypt(byte[] plainText, PrivateKey privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        Cipher encryptCipher = Cipher.getInstance("RSA");
-        encryptCipher.init(Cipher.ENCRYPT_MODE, privateKey);
-        return encryptCipher.doFinal(plainText);
-    }
-
-    protected String getPayloadV1(License license) {
-        StringBuilder builder = new StringBuilder();
-        for (Feature feature : license.getSoftware().getFeatures()) {
-            builder.append(feature.getId()).append(":").append(feature.getValue()).append("\n");
+            out.write(intToByte(signature.length));
+            out.write(signature);
+            return out.toByteArray();
+        } else {
+            throw new NoSuchKeyPairException(String.format("Key pair %s is not available", license.getSoftware().getKeyPairId()));
         }
-        return builder.toString();
-    }
-
-    protected byte[] getPayloadV2(License license) {
-        byte[] licensePayload = getPayloadV1(license).getBytes();
-        byte[] licensePayloadLength = intToByte(licensePayload.length);
-        byte[] licenseId = license.getLicenseId().getBytes();
-        byte[] licenseIdLength = intToByte(licenseId.length);
-        byte[] res = ArrayUtils.addAll(licensePayloadLength, licensePayload);
-        res = ArrayUtils.addAll(res, licenseIdLength);
-        return ArrayUtils.addAll(res, licenseId);
-    }
-
-    protected byte[] intToByte(int i) {
-        return ByteBuffer.allocate(4).putInt(i).array();
-    }
-
-    protected byte[] sign(byte[] plainText, PrivateKey privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Signature privateSignature = Signature.getInstance("SHA256withRSA");
-        privateSignature.initSign(privateKey);
-        privateSignature.update(plainText);
-        return privateSignature.sign();
     }
 }
+    
+    

@@ -1,6 +1,5 @@
 package de.shadowsoft.greenLicense.manager.ui.cli;
 
-import de.shadowsoft.greenLicense.common.license.LicenseVersion;
 import de.shadowsoft.greenLicense.core.cli.CliOutError;
 import de.shadowsoft.greenLicense.core.cli.tool.ConsoleWriter;
 import de.shadowsoft.greenLicense.manager.model.keypair.FssKeyPair;
@@ -93,8 +92,6 @@ class CliSoftwareCreate implements Runnable {
 
     @CommandLine.Option(names = {"--key"}, description = "Key ID of the key pair to associate with the software", required = true)
     private String key;
-    @CommandLine.Option(names = {"--license"}, description = "License version to use with this software", required = true)
-    private int licenseVersion;
     @CommandLine.Option(names = {"--name"}, description = "A name for yhe software to license", required = true)
     private String name;
     @CommandLine.Option(names = {"-j", "--json"}, description = "Produce JSON output")
@@ -104,7 +101,6 @@ class CliSoftwareCreate implements Runnable {
 
     public CliSoftwareCreate() {
         key = "";
-        licenseVersion = 0;
         name = "";
         version = "";
     }
@@ -136,23 +132,9 @@ class CliSoftwareCreate implements Runnable {
                 res.getErrorMessages().add(new CliOutError("Software version name may not be empty"));
             }
 
-            if (licenseVersion > 2 || licenseVersion < 1) {
-                hasError = true;
-                res.setSuccess(false);
-                res.getErrorMessages().add(new CliOutError("License version must be either 1 or 2"));
-            }
-
             if (!hasError) {
                 Software software = new Software();
                 software.setKeyPairId(keyPair.getId());
-                switch (licenseVersion) {
-                    case 1:
-                        software.setLicenseVersion(LicenseVersion.LICENSE_V1);
-                        break;
-                    case 2:
-                        software.setLicenseVersion(LicenseVersion.LICENSE_V2);
-                        break;
-                }
                 software.setName(sanitizedName);
                 software.setVersion(sanitizedVersion);
                 SoftwareService.getInstance().addSoftware(software);

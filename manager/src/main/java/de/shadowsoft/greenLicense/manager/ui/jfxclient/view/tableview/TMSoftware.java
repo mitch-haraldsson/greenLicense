@@ -13,7 +13,6 @@ public class TMSoftware extends TMBase {
 
     private Software data;
     private SimpleStringProperty keyPair;
-    private SimpleStringProperty licenseVersion;
     private SimpleStringProperty name;
     private SimpleStringProperty version;
 
@@ -21,7 +20,6 @@ public class TMSoftware extends TMBase {
         this.data = data;
         name = new SimpleStringProperty(data.getName());
         version = new SimpleStringProperty(data.getVersion());
-        licenseVersion = new SimpleStringProperty(data.getLicenseVersion().toString());
         FssKeyPair kp = KeyPairService.getInstance().getKeyById(data.getKeyPairId());
         if (kp != null) {
             keyPair = new SimpleStringProperty(kp.toString());
@@ -44,13 +42,6 @@ public class TMSoftware extends TMBase {
         this.keyPair.set(keyPair);
     }
 
-    public String getLicenseVersion() {
-        return licenseVersion.get();
-    }
-
-    public void setLicenseVersion(final String licenseVersion) {
-        this.licenseVersion.set(licenseVersion);
-    }
 
     public String getName() {
         return name.get();
@@ -72,9 +63,6 @@ public class TMSoftware extends TMBase {
         return keyPair;
     }
 
-    public SimpleStringProperty licenseVersionProperty() {
-        return licenseVersion;
-    }
 
     public SimpleStringProperty nameProperty() {
         return name;

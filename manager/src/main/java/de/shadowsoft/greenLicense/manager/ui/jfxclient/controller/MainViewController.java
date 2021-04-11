@@ -1,14 +1,15 @@
 package de.shadowsoft.greenLicense.manager.ui.jfxclient.controller;
 
+import de.shadowsoft.greenLicense.common.license.generator.core.IdCreator;
+import de.shadowsoft.greenLicense.common.license.generator.core.generator.IdResult;
 import de.shadowsoft.greenLicense.manager.config.ImportExportService;
 import de.shadowsoft.greenLicense.manager.exceptions.BadKeyException;
 import de.shadowsoft.greenLicense.manager.exceptions.EncryptionException;
 import de.shadowsoft.greenLicense.manager.exceptions.NoSuchKeyPairException;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreator;
-import de.shadowsoft.greenLicense.manager.license.LicenseCreatorV2;
+import de.shadowsoft.greenLicense.manager.license.LicenseCreatorBase;
 import de.shadowsoft.greenLicense.manager.model.license.License;
 import de.shadowsoft.greenLicense.manager.model.license.LicenseService;
-import de.shadowsoft.greenLicense.common.license.LicenseVersion;
 import de.shadowsoft.greenLicense.manager.model.software.Feature;
 import de.shadowsoft.greenLicense.manager.model.software.Software;
 import de.shadowsoft.greenLicense.manager.model.software.SoftwareService;
@@ -101,15 +102,17 @@ public class MainViewController extends LicenseManagerController {
         License license = new License();
         license.setName(txtLicenseName.getText());
         license.setSoftware(selectedSoftware.clone());
-        if (license.getSoftware().getLicenseVersion().equals(LicenseVersion.LICENSE_V2)) {
-            license.setLicenseId(txtLicenseId.getText());
-        } else {
-            license.setLicenseId("");
-        }
         try {
+            if (txtLicenseId.getText().length() > 0) {
+                license.setSystemId(txtLicenseId.getText());
+            } else {
+                IdResult idResult = new IdResult();
+                idResult.setSelector(Byte.parseByte("00000000", 2));
+                license.setSystemId(Base64.getEncoder().encodeToString(new IdCreator().createId(idResult)));
+            }
             LicenseService.getInstance().addLicense(license);
             refreshIssuedLicenses();
-        } catch (IOException | DataLoadingException e) {
+        } catch (IOException | DataLoadingException | InterruptedException e) {
             LOGGER.error(e);
             showLicenseLoadingError(e);
         }
@@ -172,18 +175,18 @@ public class MainViewController extends LicenseManagerController {
                 LOGGER.error("Unable to save settings file", e);
                 showSaveSettingsError(e);
             }
-            LicenseCreator creator = new LicenseCreatorV2();
+            LicenseCreatorBase creator = new LicenseCreator();
             try {
                 byte[] license = creator.createLicense(selectedLicense);
                 DataOutputStream os = new DataOutputStream(new FileOutputStream(targetFile));
                 os.write(license);
                 os.close();
                 if (settings.isExportBase64()) {
-                    os = new DataOutputStream(new FileOutputStream(new File(targetFile.getAbsolutePath() + settings.getBase64LicenseExtension())));
+                    os = new DataOutputStream(new FileOutputStream(targetFile.getAbsolutePath() + settings.getBase64LicenseExtension()));
                     os.write(Base64.getEncoder().encode(license));
                     os.close();
                 }
-            } catch (GeneralSecurityException | NoSuchKeyPairException | IOException | DataLoadingException e) {
+            } catch (GeneralSecurityException | NoSuchKeyPairException | IOException | DataLoadingException | InterruptedException e) {
                 LOGGER.error(String.format("Unable to create new license '%s'", selectedLicense.getId()), e);
                 AlertBoxHelper.showErrorBox(
                         resources.getString("error.title"),
@@ -413,19 +416,7 @@ public class MainViewController extends LicenseManagerController {
     }
 
     private void refreshVisibleElements() {
-        sectionLicenseId.setVisible(false);
-        if (selectedSoftware != null) {
-            if (selectedSoftware.getLicenseVersion() != null) {
-                switch (selectedSoftware.getLicenseVersion()) {
-                    case LICENSE_V2:
-                        sectionLicenseId.setVisible(true);
-                        break;
-
-                    case LICENSE_V1:
-                    default:
-                }
-            }
-        }
+        sectionLicenseId.setVisible(true);
     }
 
     private void setContextMenuEnabled(final boolean enabled) {

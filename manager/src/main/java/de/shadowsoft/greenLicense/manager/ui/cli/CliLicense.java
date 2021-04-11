@@ -1,11 +1,12 @@
 package de.shadowsoft.greenLicense.manager.ui.cli;
 
 
-import de.shadowsoft.greenLicense.common.license.LicenseVersion;
+import de.shadowsoft.greenLicense.common.license.generator.core.IdCreator;
+import de.shadowsoft.greenLicense.common.license.generator.core.generator.IdResult;
 import de.shadowsoft.greenLicense.core.cli.CliOutError;
 import de.shadowsoft.greenLicense.core.cli.tool.ConsoleWriter;
 import de.shadowsoft.greenLicense.manager.license.LicenseCreator;
-import de.shadowsoft.greenLicense.manager.license.LicenseCreatorV2;
+import de.shadowsoft.greenLicense.manager.license.LicenseCreatorBase;
 import de.shadowsoft.greenLicense.manager.model.license.License;
 import de.shadowsoft.greenLicense.manager.model.license.LicenseService;
 import de.shadowsoft.greenLicense.manager.model.software.Feature;
@@ -127,10 +128,12 @@ class CliLicenseCreate implements Runnable {
                     License license = new License();
                     license.setName(sanitizedName);
                     license.setSoftware(software.clone());
-                    if (license.getSoftware().getLicenseVersion().equals(LicenseVersion.LICENSE_V2)) {
-                        license.setLicenseId(binding);
+                    if (binding != null && binding.length() > 0) {
+                        license.setSystemId(binding);
                     } else {
-                        license.setLicenseId("");
+                        IdResult idResult = new IdResult();
+                        idResult.setSelector(Byte.parseByte("00000000", 2));
+                        license.setSystemId(Base64.getEncoder().encodeToString(new IdCreator().createId(idResult)));
                     }
                     if (featureSet != null) {
                         for (Map.Entry<String, String> featureGroup : featureSet.entrySet()) {
@@ -226,7 +229,7 @@ class CliLicenseExport implements Runnable {
 
             if (license != null) {
                 if (!hasErrors) {
-                    LicenseCreator creator = new LicenseCreatorV2();
+                    LicenseCreatorBase creator = new LicenseCreator();
                     byte[] licenseBytes = creator.createLicense(license);
                     String fileExportInfo = "No export to file";
                     if (!exportPath.isEmpty()) {
