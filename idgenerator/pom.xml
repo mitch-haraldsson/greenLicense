@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>green-license</artifactId>
         <groupId>de.shadowsoft</groupId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -34,15 +33,13 @@
                 <configuration>
                     <finalName>idgenerator</finalName>
                     <transformers>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>de.shadowsoft.greenLicense.idgenerator.jfxclient.IdGenerator</mainClass>
                             <manifestEntries>
                                 <Multi-Release>true</Multi-Release>
                             </manifestEntries>
                         </transformer>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                     </transformers>
                 </configuration>
             </plugin>
@@ -87,13 +84,13 @@
         <dependency>
             <groupId>de.shadowsoft.green-license</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>de.shadowsoft.green-license</groupId>
             <artifactId>uiFramework</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.shadowsoft</groupId>
     <artifactId>green-license</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
     <modules>
         <module>manager</module>
         <module>idgenerator</module>
@@ -18,7 +17,7 @@
         <connection>scm:git:git@github.com:mitch-haraldsson/greenLicense.git</connection>
         <developerConnection>scm:git:git@github.com:mitch-haraldsson/greenLicense.git</developerConnection>
         <url>http://repo.codebox.fss.local/greenLicense/</url>
-        <tag>HEAD</tag>
+        <tag>green-license-1.0.5</tag>
     </scm>
     <build>
         <plugins>
