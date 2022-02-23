@@ -51,8 +51,6 @@ public class SoftwareController extends LicenseManagerController {
     @FXML
     private Button btnAddSoftware;
     @FXML
-    private ComboBox<LicenseVersion> cmbLicenseVersion;
-    @FXML
     private ComboBox<CMKeyPair> cmbSoftwareKeypair;
     @FXML
     private MenuItem cmuCopyFeatureIdToClipboard;
@@ -237,7 +235,6 @@ public class SoftwareController extends LicenseManagerController {
         refreshSoftwareTable();
         refreshKeypairList();
         refreshFeatureTable();
-        initializeLicenseVersion();
     }
 
     private void initializeCmbKeyPair() {
@@ -246,19 +243,6 @@ public class SoftwareController extends LicenseManagerController {
                 selectedKeyPair = newSelection.getData();
             } else {
                 selectedKeyPair = null;
-            }
-        });
-    }
-
-    private void initializeLicenseVersion() {
-        cmbLicenseVersion.getItems().clear();
-        cmbLicenseVersion.getItems().add(LicenseVersion.LICENSE_V1);
-        cmbLicenseVersion.getItems().add(LicenseVersion.LICENSE_V2);
-        cmbLicenseVersion.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedLicenseVersion = newSelection;
-            } else {
-                selectedLicenseVersion = null;
             }
         });
     }

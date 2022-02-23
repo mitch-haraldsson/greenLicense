@@ -42,7 +42,6 @@ public class TMSoftware extends TMBase {
         this.keyPair.set(keyPair);
     }
 
-
     public String getName() {
         return name.get();
     }
@@ -62,7 +61,6 @@ public class TMSoftware extends TMBase {
     public SimpleStringProperty keyPairProperty() {
         return keyPair;
     }
-
 
     public SimpleStringProperty nameProperty() {
         return name;

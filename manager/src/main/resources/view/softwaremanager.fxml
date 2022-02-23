@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="parentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="parentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
@@ -43,12 +43,6 @@
                                        <children>
                                           <Label text="%ui.softwaremanager.software.add.keypair" />
                                           <ComboBox fx:id="cmbSoftwareKeypair" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <Label text="%ui.softwaremanager.software.licenseversion" />
-                                          <ComboBox fx:id="cmbLicenseVersion" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="BOTTOM_LEFT" HBox.hgrow="ALWAYS">

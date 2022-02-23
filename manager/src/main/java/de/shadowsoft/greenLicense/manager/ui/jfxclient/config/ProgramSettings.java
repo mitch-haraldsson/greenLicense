@@ -121,7 +121,6 @@ public class ProgramSettings {
         issuedLicensesTableColumnSettings.add(new ColumnSetting("name", "main.issuedlicenses.name", 0));
         issuedLicensesTableColumnSettings.add(new ColumnSetting("softwareName", "main.issuedlicenses.software.name", 0));
         issuedLicensesTableColumnSettings.add(new ColumnSetting("softwareVersion", "main.issuedlicenses.software.version", 0));
-        issuedLicensesTableColumnSettings.add(new ColumnSetting("licenseVersion", "main.issuedlicenses.software.licenseversion", 0));
     }
 
     private void initKeyPairsTableColumnSettings() {
@@ -141,7 +140,6 @@ public class ProgramSettings {
         softwareTableColumnSettings.add(new ColumnSetting("name", "softwaremanager.softwaretable.name", 0));
         softwareTableColumnSettings.add(new ColumnSetting("version", "softwaremanager.softwaretable.version", 0));
         softwareTableColumnSettings.add(new ColumnSetting("keyPair", "softwaremanager.softwaretable.keypair", 0));
-        softwareTableColumnSettings.add(new ColumnSetting("licenseVersion", "softwaremanager.softwaretable.licenseversion", 0));
     }
 
     public boolean isExportBase64() {
