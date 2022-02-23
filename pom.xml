@@ -15,8 +15,8 @@
         <module>core</module>
     </modules>
     <scm>
-        <connection>scm:git:dev@codebox.fss.local:greenLicense</connection>
-        <developerConnection>scm:git:dev@codebox.fss.local:greenLicense</developerConnection>
+        <connection>scm:git:git@github.com:mitch-haraldsson/greenLicense.git</connection>
+        <developerConnection>scm:git:git@github.com:mitch-haraldsson/greenLicense.git</developerConnection>
         <url>http://repo.codebox.fss.local/greenLicense/</url>
         <tag>HEAD</tag>
     </scm>
